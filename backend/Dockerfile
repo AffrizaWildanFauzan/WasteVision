@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy semua kode
 COPY backend/ ./backend/
 COPY frontend/ ./frontend/
-COPY notebook/ ./notebook/
+COPY notebooks/ ./notebooks/
 
 # Buat folder uploads
 RUN mkdir -p /app/backend/uploads/images
