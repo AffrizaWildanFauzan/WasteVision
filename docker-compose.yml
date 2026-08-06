@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  waste-classifier:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: waste-classifier-api
+    ports:
+      - "5000:5000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=5000
+      - API_DEBUG=False
+      - MODEL_PATH=model/best_model.pth
+    volumes:
+      - ./backend/model:/app/backend/model
+      - ./backend/uploads:/app/backend/uploads
+      - ./backend/.env:/app/backend/.env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s

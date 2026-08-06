@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WasteVision - Klasifikasi Sampah Cerdas</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- ============================================
+    NAVIGATION
+    ============================================ -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-icon">🌿</span>
+                <span class="logo-text">Waste<span>Vision</span></span>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="#" class="nav-link active" data-page="home">
+                    <i class="fas fa-home"></i> Beranda
+                </a>
+                <a href="#" class="nav-link" data-page="dashboard">
+                    <i class="fas fa-chart-bar"></i> Dashboard
+                </a>
+                <a href="#" class="nav-link" data-page="dataset">
+                    <i class="fas fa-database"></i> Dataset
+                </a>
+                <a href="#" class="nav-link" data-page="stats">
+                    <i class="fas fa-chart-line"></i> Statistik
+                </a>
+                <a href="#" class="nav-link" data-page="about">
+                    <i class="fas fa-info-circle"></i> Tentang
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-toggle" id="navToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================
+    MAIN CONTAINER
+    ============================================ -->
+    <div class="container">
+
+        <!-- ==========================================
+        PAGE: HOME
+        ========================================== -->
+        <div class="page active" id="page-home">
+            <!-- Hero -->
+            <header class="hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        ✨ Klasifikasi Sampah Otomatis dengan AI
+                    </h1>
+                    <p class="hero-subtitle">
+                        Didukung oleh <strong>ConvNeXt-Large</strong> - Akurasi <strong>94.8%</strong>
+                    </p>
+                    <p class="hero-developer">
+                        <i class="fas fa-user-code"></i> Dibuat oleh: Affriza Wildan Fauzan
+                    </p>
+                </div>
+            </header>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-info">
+                        <h3>26,527</h3>
+                        <p>Total Sampel</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📂</div>
+                    <div class="stat-info">
+                        <h3>3</h3>
+                        <p>Kategori</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-info">
+                        <h3>0.32s</h3>
+                        <p>Kecepatan Prediksi</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="upload-section" id="uploadSection">
+                <div class="upload-area" id="dropZone">
+                    <div class="upload-content">
+                        <div class="upload-icon-wrapper">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3>📤 Upload Gambar Sampah</h3>
+                        <p>Drag & drop atau <span class="highlight">klik untuk memilih</span></p>
+                        <p class="file-types"><i class="fas fa-file-image"></i> JPG, PNG, JPEG, WebP (Max 16MB)</p>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                        <button class="btn-primary" id="uploadBtn">
+                            <i class="fas fa-folder-open"></i> Pilih Gambar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Class Cards -->
+            <div class="class-grid">
+                <div class="class-card recyclable">
+                    <div class="class-icon">♻️</div>
+                    <h4>Recyclable</h4>
+                    <p class="class-count">9,999 sampel</p>
+                    <div class="class-bar"><div class="bar-fill" style="width:37.7%"></div></div>
+                    <span class="class-percent">37.7%</span>
+                </div>
+                <div class="class-card electronic">
+                    <div class="class-icon">💻</div>
+                    <h4>Electronic</h4>
+                    <p class="class-count">3,961 sampel</p>
+                    <div class="class-bar"><div class="bar-fill" style="width:14.9%"></div></div>
+                    <span class="class-percent">14.9%</span>
+                </div>
+                <div class="class-card organic">
+                    <div class="class-icon">🌿</div>
+                    <h4>Organic</h4>
+                    <p class="class-count">12,567 sampel</p>
+                    <div class="class-bar"><div class="bar-fill" style="width:47.4%"></div></div>
+                    <span class="class-percent">47.4%</span>
+                </div>
+            </div>
+
+            <!-- Tip Box -->
+            <div class="tip-box">
+                <i class="fas fa-lightbulb"></i>
+                <p>💡 Tips: Upload gambar sampah untuk klasifikasi otomatis</p>
+            </div>
+        </div>
+
+        <!-- ==========================================
+        PAGE: DASHBOARD
+        ========================================== -->
+        <div class="page" id="page-dashboard">
+            <h2 class="page-title"><i class="fas fa-chart-bar"></i> Dashboard Performa</h2>
+            <p class="page-subtitle">📍 Model: ConvNeXt-Large | Developer: Affriza Wildan Fauzan</p>
+
+            <div class="dashboard-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">🎯</div>
+                    <div class="metric-info">
+                        <span class="metric-value">94.8%</span>
+                        <span class="metric-label">Akurasi</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">📈</div>
+                    <div class="metric-info">
+                        <span class="metric-value">0.948</span>
+                        <span class="metric-label">F1-Score</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">⏱️</div>
+                    <div class="metric-info">
+                        <span class="metric-value">0.32s</span>
+                        <span class="metric-label">Avg. Time</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">📊</div>
+                    <div class="metric-info">
+                        <span class="metric-value">1,234</span>
+                        <span class="metric-label">Total Prediksi</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confusion Matrix -->
+            <div class="matrix-container">
+                <h3>📈 Confusion Matrix</h3>
+                <div class="matrix">
+                    <div class="matrix-row">
+                        <div class="matrix-label">Actual</div>
+                        <div class="matrix-label">Recyclable</div>
+                        <div class="matrix-label">Electronic</div>
+                        <div class="matrix-label">Organic</div>
+                    </div>
+                    <div class="matrix-row">
+                        <div class="matrix-label">Recyclable</div>
+                        <div class="matrix-cell high">92%</div>
+                        <div class="matrix-cell low">5%</div>
+                        <div class="matrix-cell low">3%</div>
+                    </div>
+                    <div class="matrix-row">
+                        <div class="matrix-label">Electronic</div>
+                        <div class="matrix-cell low">4%</div>
+                        <div class="matrix-cell high">88%</div>
+                        <div class="matrix-cell low">8%</div>
+                    </div>
+                    <div class="matrix-row">
+                        <div class="matrix-label">Organic</div>
+                        <div class="matrix-cell low">2%</div>
+                        <div class="matrix-cell low">6%</div>
+                        <div class="matrix-cell high">92%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+        PAGE: DATASET (DENGAN SAMPLE IMAGES ASLI)
+        ========================================== -->
+        <div class="page" id="page-dataset">
+            <h2 class="page-title"><i class="fas fa-database"></i> Dataset Sampah</h2>
+            <p class="page-subtitle">Total: 26,527 gambar | 3 kategori</p>
+
+            <div class="dataset-stats">
+                <div class="ds-card">
+                    <span class="ds-icon">📁</span>
+                    <div>
+                        <h4>26,527</h4>
+                        <p>Total Gambar</p>
+                    </div>
+                </div>
+                <div class="ds-card">
+                    <span class="ds-icon">🏷️</span>
+                    <div>
+                        <h4>3</h4>
+                        <p>Kategori</p>
+                    </div>
+                </div>
+                <div class="ds-card">
+                    <span class="ds-icon">📅</span>
+                    <div>
+                        <h4>2026</h4>
+                        <p>Tahun Dataset</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Distribution Chart -->
+            <div class="chart-container">
+                <h3>📊 Distribusi Dataset</h3>
+                <div class="bar-chart">
+                    <div class="chart-bar">
+                        <div class="chart-label">♻️ Recyclable</div>
+                        <div class="chart-track">
+                            <div class="chart-fill" style="width:37.7%; background:#00B894;"></div>
+                        </div>
+                        <span class="chart-value">9,999 (37.7%)</span>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">💻 Electronic</div>
+                        <div class="chart-track">
+                            <div class="chart-fill" style="width:14.9%; background:#0984E3;"></div>
+                        </div>
+                        <span class="chart-value">3,961 (14.9%)</span>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">🌿 Organic</div>
+                        <div class="chart-track">
+                            <div class="chart-fill" style="width:47.4%; background:#FDCB6E;"></div>
+                        </div>
+                        <span class="chart-value">12,567 (47.4%)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================
+            SAMPLE IMAGES - 6 GAMBAR PER KATEGORI
+            ========================================== -->
+            <div class="sample-grid">
+                <h3>🖼️ Sample Images per Kategori (6 sampel/kategori)</h3>
+                <div class="sample-cards">
+                    <!-- Recyclable -->
+                    <div class="sample-card">
+                        <div class="sample-header" style="color:#00B894;">♻️ Recyclable</div>
+                        <div class="sample-images">
+                            <img src="assets/samples/recyclable/sample1.jpg" alt="Recyclable" class="sample-img" loading="lazy">
+                            <img src="assets/samples/recyclable/sample2.jpg" alt="Recyclable" class="sample-img" loading="lazy">
+                            <img src="assets/samples/recyclable/sample3.jpg" alt="Recyclable" class="sample-img" loading="lazy">
+                            <img src="assets/samples/recyclable/sample4.jpg" alt="Recyclable" class="sample-img" loading="lazy">
+                            <img src="assets/samples/recyclable/sample5.jpg" alt="Recyclable" class="sample-img" loading="lazy">
+                            <img src="assets/samples/recyclable/sample6.jpg" alt="Recyclable" class="sample-img" loading="lazy">
+                        </div>
+                    </div>
+                    <!-- Electronic -->
+                    <div class="sample-card">
+                        <div class="sample-header" style="color:#0984E3;">💻 Electronic</div>
+                        <div class="sample-images">
+                            <img src="assets/samples/electronic/sample1.jpg" alt="Electronic" class="sample-img" loading="lazy">
+                            <img src="assets/samples/electronic/sample2.jpg" alt="Electronic" class="sample-img" loading="lazy">
+                            <img src="assets/samples/electronic/sample3.jpg" alt="Electronic" class="sample-img" loading="lazy">
+                            <img src="assets/samples/electronic/sample4.jpg" alt="Electronic" class="sample-img" loading="lazy">
+                            <img src="assets/samples/electronic/sample5.jpg" alt="Electronic" class="sample-img" loading="lazy">
+                            <img src="assets/samples/electronic/sample6.jpg" alt="Electronic" class="sample-img" loading="lazy">
+                        </div>
+                    </div>
+                    <!-- Organic -->
+                    <div class="sample-card">
+                        <div class="sample-header" style="color:#FDCB6E;">🌿 Organic</div>
+                        <div class="sample-images">
+                            <img src="assets/samples/organic/sample1.jpg" alt="Organic" class="sample-img" loading="lazy">
+                            <img src="assets/samples/organic/sample2.jpg" alt="Organic" class="sample-img" loading="lazy">
+                            <img src="assets/samples/organic/sample3.jpg" alt="Organic" class="sample-img" loading="lazy">
+                            <img src="assets/samples/organic/sample4.jpg" alt="Organic" class="sample-img" loading="lazy">
+                            <img src="assets/samples/organic/sample5.jpg" alt="Organic" class="sample-img" loading="lazy">
+                            <img src="assets/samples/organic/sample6.jpg" alt="Organic" class="sample-img" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                <p style="text-align:center; color:var(--text-light); font-size:0.85rem; margin-top:12px;">
+                    <i class="fas fa-info-circle"></i> Menampilkan 6 sample gambar per kategori dari total dataset
+                </p>
+            </div>
+        </div>
+
+        <!-- ==========================================
+        PAGE: STATISTIK
+        ========================================== -->
+        <div class="page" id="page-stats">
+            <h2 class="page-title"><i class="fas fa-chart-line"></i> Statistik & Analisis</h2>
+            <p class="page-subtitle">📊 Visualisasi performa model secara detail</p>
+
+            <div class="stats-grid-large">
+                <div class="stat-box">
+                    <h4>🏆 Top Predictions</h4>
+                    <div class="top-list">
+                        <div class="top-item">
+                            <span class="top-rank">1</span>
+                            <span class="top-class">🌿 Organic</span>
+                            <span class="top-count">12,567 (47.4%)</span>
+                        </div>
+                        <div class="top-item">
+                            <span class="top-rank">2</span>
+                            <span class="top-class">♻️ Recyclable</span>
+                            <span class="top-count">9,999 (37.7%)</span>
+                        </div>
+                        <div class="top-item">
+                            <span class="top-rank">3</span>
+                            <span class="top-class">💻 Electronic</span>
+                            <span class="top-count">3,961 (14.9%)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <h4>📈 Performa per Kelas</h4>
+                    <div class="perf-item">
+                        <span>♻️ Recyclable</span>
+                        <div class="perf-bar"><div style="width:92%"></div></div>
+                        <span>92%</span>
+                    </div>
+                    <div class="perf-item">
+                        <span>💻 Electronic</span>
+                        <div class="perf-bar"><div style="width:88%"></div></div>
+                        <span>88%</span>
+                    </div>
+                    <div class="perf-item">
+                        <span>🌿 Organic</span>
+                        <div class="perf-bar"><div style="width:92%"></div></div>
+                        <span>92%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+        PAGE: TENTANG
+        ========================================== -->
+        <div class="page" id="page-about">
+            <h2 class="page-title"><i class="fas fa-info-circle"></i> Tentang WasteVision</h2>
+
+            <div class="about-grid">
+                <div class="about-card mission">
+                    <h3>🎯 Misi</h3>
+                    <p>Membantu masyarakat memilah sampah dengan mudah menggunakan teknologi AI untuk lingkungan yang lebih bersih.</p>
+                </div>
+
+                <div class="about-card developer">
+                    <h3>👨‍💻 Developer</h3>
+                    <div class="dev-info">
+                        <div class="dev-detail">
+                            <span class="dev-label">Nama</span>
+                            <span class="dev-value">Affriza Wildan Fauzan</span>
+                        </div>
+                        <div class="dev-detail">
+                            <span class="dev-label">Proyek</span>
+                            <span class="dev-value">Final Project AI Engineering</span>
+                        </div>
+                        <div class="dev-detail">
+                            <span class="dev-label">Tahun</span>
+                            <span class="dev-value">2026</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-card social">
+                    <h3>🔗 Social Media & Portofolio</h3>
+                    <div class="social-links">
+                        <a href="https://github.com/AffrizaWildanFauzan" target="_blank" class="social-link github">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                        <a href="https://www.linkedin.com/in/affrizawildanfauzan/" target="_blank" class="social-link linkedin">
+                            <i class="fab fa-linkedin"></i> LinkedIn
+                        </a>
+                        <a href="mailto:affriza05@gmail.com" class="social-link email">
+                            <i class="fas fa-envelope"></i> Email
+                        </a>
+                    </div>
+                </div>
+
+                <div class="about-card tech">
+                    <h3>🛠️ Teknologi</h3>
+                    <div class="tech-items">
+                        <span class="tech-tag">🧠 ConvNeXt-Large</span>
+                        <span class="tech-tag">📚 PyTorch 2.0.0</span>
+                        <span class="tech-tag">🌐 Flask 2.3.3</span>
+                        <span class="tech-tag">💻 HTML5</span>
+                        <span class="tech-tag">🎨 CSS3</span>
+                        <span class="tech-tag">⚡ JavaScript</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ============================================
+    FOOTER
+    ============================================ -->
+    <footer>
+        <div class="footer-content">
+            <p>Developed by <strong>Affriza Wildan Fauzan</strong></p>
+            <div class="footer-social">
+                <a href="https://github.com/AffrizaWildanFauzan" target="_blank" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/affrizawildanfauzan/" target="_blank" title="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </div>
+            <p class="footer-copy">© 2026 WasteVision</p>
+        </div>
+    </footer>
+
+    <!-- ============================================
+    LOADING OVERLAY
+    ============================================ -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="spinner"></div>
+        <p>🧠 Menganalisis gambar...</p>
+        <p class="loading-sub">Mohon tunggu sebentar</p>
+    </div>
+
+    <!-- ============================================
+    SCRIPTS
+    ============================================ -->
+    <script src="script.js"></script>
+</body>
+</html>
