@@ -2,7 +2,7 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Install system dependencies (diperbaiki)
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     libgl1 \
     libglib2.0-0 \
@@ -16,10 +16,9 @@ RUN apt-get update && apt-get install -y \
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy semua kode
+# Copy semua kode (tanpa notebook)
 COPY backend/ ./backend/
 COPY frontend/ ./frontend/
-COPY notebooks/ ./notebooks/
 
 # Buat folder uploads
 RUN mkdir -p /app/backend/uploads/images
