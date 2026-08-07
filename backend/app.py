@@ -1,7 +1,7 @@
 import os
 import sys
 import logging
-import gdown
+import gdown  # Library untuk download dari Google Drive
 from pathlib import Path
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
@@ -11,33 +11,6 @@ from torchvision import transforms
 import io
 import base64
 
-# DEBUG: FORCE LOGGING KE FILE DAN CONSOLE
-# Buat folder log jika belum ada
-
-log_dir = Path("/app/backend/logs")
-log_dir.mkdir(parents=True, exist_ok=True)
-
-# Redirect stdout dan stderr ke file
-sys.stdout = open(log_dir / "stdout.log", "w")
-sys.stderr = open(log_dir / "stderr.log", "w")
-
-print("🚀 APP.PY DIMULAI!")
-print(f"📂 Working directory: {os.getcwd()}")
-print(f"📂 File exists: {os.path.exists('backend/model/best_model.pth')}")
-
-# Setup logging
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(sys.stdout),
-        logging.FileHandler(log_dir / "app_debug.log")
-    ]
-)
-logger = logging.getLogger(__name__)
-logger.info("🚀 APP.PY DIMULAI!")
-logger.info(f"📂 Working directory: {os.getcwd()}")
-
 # Add parent directory to path
 sys.path.append(str(Path(__file__).resolve().parent))
 
@@ -45,77 +18,71 @@ from config import Config
 from utils.model_utils import ModelService
 from utils.file_utils import get_file_storage
 
+# ============================================
 # DOWNLOAD MODEL DARI GOOGLE DRIVE
+# ============================================
 
-# Path yang benar (sama dengan config.py)
+# ✅ Path yang benar (sama dengan config.py)
 MODEL_PATH = Path("backend/model/best_model.pth")
 MODEL_URL = "https://drive.google.com/uc?id=1uZbI8Qe060lJtI_t0NyrShi5MQgsK26z"
 
 def download_model():
     """Download model dari Google Drive jika tidak ditemukan"""
-    logger.info(f"🔍 Cek model di: {MODEL_PATH.absolute()}")
     if not MODEL_PATH.exists():
-        logger.info(f"📥 Model tidak ditemukan di {MODEL_PATH}")
-        logger.info(f"📥 Mengunduh dari Google Drive...")
+        print(f"📥 Model tidak ditemukan di {MODEL_PATH}")
+        print(f"📥 Mengunduh dari Google Drive...")
         
         # Buat folder model jika belum ada
         MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
         
         try:
             gdown.download(MODEL_URL, str(MODEL_PATH), quiet=False)
-            logger.info(f"✅ Model berhasil diunduh ke {MODEL_PATH}")
+            print(f"✅ Model berhasil diunduh ke {MODEL_PATH}")
         except Exception as e:
-            logger.error(f"❌ Gagal mengunduh model: {e}")
+            print(f"❌ Gagal mengunduh model: {e}")
             raise
     else:
-        logger.info(f"✅ Model sudah ada di {MODEL_PATH}")
-        logger.info(f"   Ukuran: {MODEL_PATH.stat().st_size / (1024*1024):.2f} MB")
+        print(f"✅ Model sudah ada di {MODEL_PATH}")
+        print(f"   Ukuran: {MODEL_PATH.stat().st_size / (1024*1024):.2f} MB")
 
+# ============================================
 # SETUP LOGGING
-
+# ============================================
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
+# ============================================
 # INIT FLASK APP
-
-logger.info("🏗️ Membuat Flask app...")
+# ============================================
 app = Flask(__name__, static_folder='../frontend', static_url_path='')
 app.config['MAX_CONTENT_LENGTH'] = Config.MAX_CONTENT_LENGTH
 app.secret_key = Config.SECRET_KEY
 
 # CORS
 CORS(app, origins=Config.CORS_ORIGINS)
-logger.info("✅ Flask app selesai dibuat")
 
+# ============================================
 # INIT SERVICES
-
+# ============================================
 model_service = None
 file_storage = None
 
 def init_services():
     """Initialize all services"""
     global model_service, file_storage
-    logger.info("🔄 Memulai init_services()...")
     
     # DOWNLOAD MODEL DULU!
     try:
-        logger.info("📥 Memulai download_model()...")
         download_model()
-        logger.info("✅ download_model() selesai")
     except Exception as e:
         logger.error(f"❌ Gagal download model: {e}")
-        logger.error(f"❌ Detail error: {e.__class__.__name__}: {e}")
-        import traceback
-        logger.error(traceback.format_exc())
     
     # Load model
     try:
-        logger.info(f"🔍 Validasi model path: {Config.validate_model_path()}")
         if Config.validate_model_path():
-            logger.info("📂 Model path valid, mencoba load...")
             model_service = ModelService(
                 model_path=Config.MODEL_PATH,
                 num_classes=Config.NUM_CLASSES,
@@ -130,13 +97,8 @@ def init_services():
             logger.info(f"✅ Model loaded successfully: {Config.MODEL_PATH}")
         else:
             logger.error(f"❌ Model not found: {Config.MODEL_PATH}")
-            logger.error(f"📂 Direktori saat ini: {os.getcwd()}")
-            logger.error(f"📂 File di backend/model: {list(Path('backend/model').glob('*')) if Path('backend/model').exists() else 'Folder tidak ada'}")
     except Exception as e:
         logger.error(f"❌ Error loading model: {e}")
-        logger.error(f"❌ Detail error: {e.__class__.__name__}: {e}")
-        import traceback
-        logger.error(traceback.format_exc())
     
     # Initialize file storage
     try:
@@ -145,7 +107,9 @@ def init_services():
     except Exception as e:
         logger.error(f"❌ Error initializing file storage: {e}")
 
+# ============================================
 # ROUTES
+# ============================================
 
 @app.route('/uploads/<path:filename>')
 def serve_upload(filename):
@@ -303,32 +267,25 @@ def too_large(error):
         'error': f'File too large. Maximum size: {Config.MAX_CONTENT_LENGTH // (1024*1024)}MB'
     }), 413
 
+# ============================================
 # MAIN
+# ============================================
 
 if __name__ == '__main__':
-    logger.info("🔥 MENJALANKAN MAIN APP...")
-    print("🔥 MENJALANKAN MAIN APP...")
-    
     # Initialize services
-    logger.info("🔄 Memanggil init_services()...")
     init_services()
-    logger.info("✅ init_services() selesai")
     
-    port = int(os.environ.get('PORT', 5000))
-    logger.info(f"🚀 Starting Waste Classification API on 0.0.0.0:{port}")
+    logger.info(f"🚀 Starting Waste Classification API on {Config.API_HOST}:{Config.API_PORT}")
     logger.info(f"📊 Model loaded: {Config.validate_model_path()}")
     logger.info(f"📁 Upload folder: {Config.UPLOAD_FOLDER}")
     logger.info(f"🔧 Debug mode: {Config.API_DEBUG}")
     
-    print(f"🚀 Flask is starting on port {port}...")
-    print(f"📡 Listening on http://0.0.0.0:{port}")
+    # ✅ TARUH KODE PRINT DI SINI (SEBELUM app.run)
+    print("🚀 Flask is starting...")
+    print(f"📡 Listening on port {Config.API_PORT}")
     
-    try:
-        app.run(
-            host='0.0.0.0',
-            port=port,
-            debug=Config.API_DEBUG
-        )
-    except Exception as e:
-        logger.error(f"❌ Flask gagal berjalan: {e}")
-        print(f"❌ Flask gagal berjalan: {e}")
+    app.run(
+        host=Config.API_HOST,
+        port=Config.API_PORT,
+        debug=Config.API_DEBUG
+    )
