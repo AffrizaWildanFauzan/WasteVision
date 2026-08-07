@@ -18,13 +18,11 @@ from config import Config
 from utils.model_utils import ModelService
 from utils.file_utils import get_file_storage
 
-# ============================================
 # DOWNLOAD MODEL DARI GOOGLE DRIVE
-# ============================================
 
-# Konfigurasi model
+# Path yang benar (sama dengan config.py)
 MODEL_PATH = Path("backend/model/best_model.pth")
-MODEL_URL = "https://drive.google.com/uc?id=1uZbI8Qe060lJtI_t0NyrShi5MQgsK26z"  # Direct download link
+MODEL_URL = "https://drive.google.com/uc?id=1uZbI8Qe060lJtI_t0NyrShi5MQgsK26z"
 
 def download_model():
     """Download model dari Google Drive jika tidak ditemukan"""
@@ -36,7 +34,6 @@ def download_model():
         MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
         
         try:
-            # Download dengan gdown (pakai direct link)
             gdown.download(MODEL_URL, str(MODEL_PATH), quiet=False)
             print(f"✅ Model berhasil diunduh ke {MODEL_PATH}")
         except Exception as e:
@@ -46,18 +43,14 @@ def download_model():
         print(f"✅ Model sudah ada di {MODEL_PATH}")
         print(f"   Ukuran: {MODEL_PATH.stat().st_size / (1024*1024):.2f} MB")
 
-# ============================================
 # SETUP LOGGING
-# ============================================
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
-# ============================================
 # INIT FLASK APP
-# ============================================
 app = Flask(__name__, static_folder='../frontend', static_url_path='')
 app.config['MAX_CONTENT_LENGTH'] = Config.MAX_CONTENT_LENGTH
 app.secret_key = Config.SECRET_KEY
@@ -65,9 +58,7 @@ app.secret_key = Config.SECRET_KEY
 # CORS
 CORS(app, origins=Config.CORS_ORIGINS)
 
-# ============================================
 # INIT SERVICES
-# ============================================
 model_service = None
 file_storage = None
 
@@ -108,9 +99,7 @@ def init_services():
     except Exception as e:
         logger.error(f"❌ Error initializing file storage: {e}")
 
-# ============================================
 # ROUTES
-# ============================================
 
 @app.route('/uploads/<path:filename>')
 def serve_upload(filename):
@@ -250,9 +239,7 @@ def list_files():
         'count': len(files)
     })
 
-# ============================================
 # ERROR HANDLERS
-# ============================================
 
 @app.errorhandler(404)
 def not_found(error):
@@ -268,9 +255,7 @@ def too_large(error):
         'error': f'File too large. Maximum size: {Config.MAX_CONTENT_LENGTH // (1024*1024)}MB'
     }), 413
 
-# ============================================
 # MAIN
-# ============================================
 
 if __name__ == '__main__':
     # Initialize services
@@ -280,6 +265,10 @@ if __name__ == '__main__':
     logger.info(f"📊 Model loaded: {Config.validate_model_path()}")
     logger.info(f"📁 Upload folder: {Config.UPLOAD_FOLDER}")
     logger.info(f"🔧 Debug mode: {Config.API_DEBUG}")
+    
+    # TARUH KODE PRINT DI SINI (SEBELUM app.run)
+    print("🚀 Flask is starting...")
+    print(f"📡 Listening on port {Config.API_PORT}")
     
     app.run(
         host=Config.API_HOST,
