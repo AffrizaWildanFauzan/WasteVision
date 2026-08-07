@@ -23,7 +23,7 @@ from utils.file_utils import get_file_storage
 # ============================================
 
 # Konfigurasi model
-MODEL_PATH = Path("model/best_model.pth")
+MODEL_PATH = Path("backend/model/best_model.pth")
 MODEL_URL = "https://drive.google.com/uc?id=1uZbI8Qe060lJtI_t0NyrShi5MQgsK26z"  # Direct download link
 
 def download_model():
